@@ -23,18 +23,17 @@ namespace PO
     public:
 
         template<typename ...Type,typename ...Pa>
-            auto CreateRender( const std::shared_ptr<GraphicInfo>& GI, TypePair< TypeInfo<Type...>,std::tuple<Pa...> >  && T  ) ->  Adapter<PO_Inner_Tool::Render_Packet< PO_Inner_Tool::Render_Modual<Type...> >,Render,Type...,POContext>;
+            auto CreateRender( const std::shared_ptr<GraphicInfo>& GI,TypePair< TypeInfo<Type...>,std::tuple<Pa...> >  && T  ) ->  Adapter<PO_Inner_Tool::Render_Packet< PO_Inner_Tool::Render_Modual<Type...> >,Render,Type...,POContext>;
         auto CreateRender( const std::shared_ptr<GraphicInfo>& GI ) -> Adapter<PO_Inner_Tool::Render_Packet< PO_Inner_Tool::Render_Modual<EmptyModual> >,Render,EmptyModual,POContext>
         {
-            auto Iu=CreateModule<EmptyModual>();
-            return CreateRender(GI,std::move(Iu));
+            return CreateRender(GI,CreateModule<EmptyModual>());
         }
         void DeliverEvent( const std::shared_ptr<Event>& Tem );
         int ContextLoop();
     };
 
     template<typename ...Type,typename ...Pa>
-    auto POContext::CreateRender( const std::shared_ptr<GraphicInfo>& GI,  TypePair< TypeInfo<Type...>,std::tuple<Pa...>   >&& T    ) -> Adapter<PO_Inner_Tool::Render_Packet< PO_Inner_Tool::Render_Modual<Type...> >,Render,Type...,POContext>
+    auto POContext::CreateRender( const std::shared_ptr<GraphicInfo>& GI, TypePair< TypeInfo<Type...>,std::tuple<Pa...>   >&& T    ) -> Adapter<PO_Inner_Tool::Render_Packet< PO_Inner_Tool::Render_Modual<Type...> >,Render,Type...,POContext>
     {
         std::shared_ptr<PO_Inner_Tool::Render_Packet<PO_Inner_Tool::Render_Modual<Type...> >  > Tem(new PO_Inner_Tool::Render_Packet< PO_Inner_Tool::Render_Modual<Type...> >( *GI,*this,T.Data ));
         std::shared_ptr<Render> List(Tem);

@@ -55,9 +55,9 @@ struct EmptyTupleCreater<1>
 };
 
 template<typename Name,typename ...Para>
-    auto CreateTypePair( Para... Pa ) -> TypePair<TypeInfo<Name>,std::tuple<std::tuple<Para...>>>
+    auto CreateTypePair( Para&&... Pa ) -> TypePair<TypeInfo<Name>,decltype(std::make_tuple(std::make_tuple(std::forward<Para>(Pa)...)))>
     {
-        TypePair<TypeInfo<Name> ,std::tuple<std::tuple<Para...>> >  TemPtr(std::make_tuple(std::make_tuple(Pa...)));
+        TypePair<TypeInfo<Name> ,decltype(std::make_tuple(std::make_tuple(std::forward<Para>(Pa)...))) >  TemPtr(std::make_tuple(std::make_tuple(std::forward<Para>(Pa)...)));
         return TemPtr;
     }
 

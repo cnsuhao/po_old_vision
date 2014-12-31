@@ -40,7 +40,8 @@ namespace PO
         }
 
         template<typename ...Expand> template<typename T>
-            Render_Modual<Expand...>::Render_Modual(Render& R,POContext& POC,T& t):UnbalanceTreeInheritance<Expand...>(t)
+            Render_Modual<Expand...>::Render_Modual(Render& R,POContext& POC,T&& t)
+                :UnbalanceTreeInheritance<Expand...>(std::forward<T>(t))
             {
                 Adapter<Expand...> A1(*this);
                 auto A2=A1.Connect(R);

@@ -14,30 +14,30 @@ void KeyInput::ResetDynamic()
 
 bool KeyInput::RespondEvent(const EventBox& Sp,Adapter<FontManager,Render> AD)
 {
-    if((!Respond)||(!Event::IsTextActive()))
+    if((!Respond)||!SDL_IsTextInputActive())
         return false;
     for(auto &I:Sp.GetKeyBox())
     {
-        Event& Ev(*I);
-        if(Ev.IsKeyButtonUp())
+        Event::Key Ev(I);
+        if(Ev.IsButtonUp())
         {
-            if(Ev.IsKeyLeft())
+            if(Ev.IsLeft())
             {
                 if(Cursor!=DT.begin())
                     --Cursor;
-            }else if(Ev.IsKeyRight())
+            }else if(Ev.IsRight())
             {
                 if(Cursor!=DT.end())
                     ++Cursor;
-            }else if(Ev.IsKeyEnter())
+            }else if(Ev.IsEnter())
             {
                 Respond=false;
                 TextReady=true;
-            }else if(Ev.IsKeyEsc())
+            }else if(Ev.IsEsc())
             {
                 Respond=false;
                 ResetDynamic();
-            }else if(Ev.IsKeyDelete())
+            }else if(Ev.IsDelete())
             {
                 if(!DT.empty())
                 {
@@ -58,11 +58,11 @@ bool KeyInput::RespondEvent(const EventBox& Sp,Adapter<FontManager,Render> AD)
     }
     for(auto &I:Sp.GetTextBox())
     {
-        Event& U(*I);
-        if(U.IsTextInput())
+        Event::Text U(*I);
+        if(U.IsInput())
         {
             std::string Tem;
-            Tem+=U.GetTextInput();
+            Tem+=U.GetInput();
             DynamicTextData<std::list> TemC;
             static_cast<FontManager&>(AD).CreateDynamicText(Tem,TemC);
             for(auto& L:TemC)

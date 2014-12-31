@@ -3,7 +3,7 @@
 #include <list>
 namespace TOOL
 {
-    template<typename TOOL>
+    /*template<typename TOOL>
     class MemoryTool
     {
         struct Level_1
@@ -20,7 +20,7 @@ namespace TOOL
         {
 
         };
-    };
+    };*/
 }
 
 

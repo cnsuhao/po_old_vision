@@ -3,7 +3,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <GL/gl.h>
-#include "event.h"
+#include "../events/event.h"
+#include "../events/event_key.h"
+#include "../events/event_mouse.h"
 #include "../error/poerror.h"
 #include "graphicenvironmentalpair.h"
 #include "../language.h"

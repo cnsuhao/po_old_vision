@@ -50,7 +50,8 @@ namespace PO
         void GetMouseLocation(float& X,float &Y,const std::shared_ptr<Event>& P)const
         {
             int Xi,Yi;
-            P->GetMouse(Xi,Yi);
+            Event::Mouse M(P);
+            M.GetLocation(Xi,Yi);
             PointCalculate(Xi,Yi,X,Y);
         }
         void GetMouse( Vertex<2>& P,const std::shared_ptr<Event>& EP )const {GetMouseLocation(P(0),P(1),EP); }

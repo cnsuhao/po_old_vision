@@ -59,12 +59,18 @@ template<typename Class>
 class TupleInitClass:public Class
 {
     template<typename ...Type,unsigned int L,unsigned int N,typename ...AP>
-    TupleInitClass( std::tuple<Type...>& K , const IndexSquence<L,N>& IS, AP&... A  ):TupleInitClass(K,IndexSquence<L,N>::Next(),A...,std::get<IndexSquence<L,N>::Value>(K)){}
+    TupleInitClass( std::tuple<Type...>& K , const IndexSquence<L,N>& IS, AP&&... A  ):TupleInitClass(K,IndexSquence<L,N>::Next(),A...,std::get<IndexSquence<L,N>::Value>(K)){}
     template<typename ...Type,unsigned int L,typename ...AP>
-    TupleInitClass( std::tuple<Type...>& K , const IndexSquence<L,L>& IS, AP&... A  ):Class(A...){}
+    TupleInitClass( std::tuple<Type...>& K , const IndexSquence<L,L>& IS, AP&&... A  ):Class(A...){}
+    template<typename ...Type,unsigned int L,unsigned int N,typename ...AP>
+    TupleInitClass( std::tuple<Type...>&& K , const IndexSquence<L,N>& IS, AP&&... A  ):TupleInitClass(std::forward<std::tuple<Type...>>(K),IndexSquence<L,N>::Next(),A...,std::get<IndexSquence<L,N>::Value>(std::forward<std::tuple<Type...>>(K))){}
+    template<typename ...Type,unsigned int L,typename ...AP>
+    TupleInitClass( std::tuple<Type...>&& K , const IndexSquence<L,L>& IS, AP&&... A  ):Class(std::forward<AP>(A)...){}
 public:
     template< typename ...Type>
-    TupleInitClass( std::tuple<Type...>& K ):TupleInitClass(K,GetIndex<sizeof...(Type)>()){}
+        TupleInitClass( std::tuple<Type...>&& K ):TupleInitClass(std::forward<std::tuple<Type...>>(K),GetIndex<sizeof...(Type)>()){}
+    template< typename ...Type>
+        TupleInitClass( std::tuple<Type...>& K ):TupleInitClass(K,GetIndex<sizeof...(Type)>()){}
     TupleInitClass(){}
 };
 

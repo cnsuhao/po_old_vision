@@ -3,7 +3,6 @@
 #include "render.h"
 #include "plugin_packet.h"
 #include "templatemetaprogramming/typeselect.h"
-#include "templatemetaprogramming/renderfunctioncheck.h"
 #include "templatemetaprogramming/detect.h"
 namespace PO
 {
@@ -33,7 +32,7 @@ namespace PO
             PluStoreListType PosPluginList;
 
             UnbalanceTreeInheritance<Expand...>& GetMaxLevel() {return *this;}
-            template<typename T>    Render_Modual(Render& R,POContext& POC,T& t);
+            template<typename T>    Render_Modual(Render& R,POContext& POC,T&& t);
         };
 
         template<typename Expand>
@@ -53,8 +52,9 @@ namespace PO
                 const GraphicInfo& GetGraphicInfo()const            {return *this;}
                 void RenderLoop(POContext& );
                 void ResetWindowSize(int X,int Y){ContextDelete();GraphicContext::ResetWindowSize(X,Y);ContextRebuild();}
-                template<typename UnknowType> Render_Packet( GraphicInfo& GI,POContext& POC,UnknowType& UT  ):Render(GI),Expand(*this,POC,UT){}
+                template<typename UnknowType> Render_Packet( GraphicInfo& GI,POContext& POC,UnknowType&& UT  ):Render(GI),Expand(*this,POC,std::forward<UnknowType>(UT)){}
             };
+
         template<typename T,typename Ex>struct Render_Modual_Creater
         {
             auto static Create(typename Ex::RenAdapter&) -> typename Ex::PluStoreType;

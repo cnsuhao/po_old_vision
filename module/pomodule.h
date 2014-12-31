@@ -36,9 +36,9 @@ namespace PO
 {
     class EmptyModual{};
     template< typename Type ,typename ...AP>
-        inline auto CreateGenerialModule( AP... ap) -> decltype(CreateTypePair<Type>(ap...)){Type::PreConstruct(ap...);return CreateTypePair<Type>( ap... );}
+        inline auto CreateGenerialModule( AP&&... ap) -> decltype(CreateTypePair<Type>( std::forward<AP>(ap)...)){Type::PreConstruct(ap...);return CreateTypePair<Type>( std::forward<AP>(ap)... );}
     template< typename Type ,typename ...AP>
-        inline auto CreateModule( AP... ap) -> decltype(CreateTypePair<Type>(ap...)){return CreateTypePair<Type>( ap... );}
+        inline auto CreateModule( AP&&... ap) -> decltype(CreateTypePair<Type>(std::forward<AP>(ap)...)){return CreateTypePair<Type>( std::forward<AP>(ap)... );}
     template< typename ...Type>
         inline auto CreateModule() -> decltype(CreateTypePair<Type...>()){return CreateTypePair<Type...>();}
 

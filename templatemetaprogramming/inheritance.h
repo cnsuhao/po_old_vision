@@ -37,10 +37,18 @@ A::R(i);B::R(i);C::R(i);D::R(i);
 template<typename ThisClass,typename ...OtherClass>
 class UnbalanceTreeInheritance:public TupleInitClass<ThisClass>,public UnbalanceTreeInheritance<OtherClass...>
 {
-    public:
+public:
     template<unsigned int L,unsigned int N,typename ...A1>
-        UnbalanceTreeInheritance( const IndexSquence<L,N>& IS, std::tuple<A1...>& T ):TupleInitClass<ThisClass>(std::get<IndexSquence<L,N>::Value>(T)),UnbalanceTreeInheritance<OtherClass...>(IS.Next(),T){}
+        UnbalanceTreeInheritance( const IndexSquence<L,N>& IS,std::tuple<A1...>& T ):
+            TupleInitClass<ThisClass>(std::get<IndexSquence<L,N>::Value>(T)),
+            UnbalanceTreeInheritance<OtherClass...>(IS.Next(),T){}
+    /*template<unsigned int L,unsigned int N,typename ...A1>
+        UnbalanceTreeInheritance( const IndexSquence<L,N>& IS,std::tuple<A1...>&& T ):
+            TupleInitClass<ThisClass>(std::get<IndexSquence<L,N>::Value>(std::forward<std::tuple<A1...>>(T))),
+            UnbalanceTreeInheritance<OtherClass...>(IS.Next(), std::forward<std::tuple<A1...>>(T)){}*/
 
+    template<typename ...A1>
+        UnbalanceTreeInheritance( std::tuple<A1...>&& T ):UnbalanceTreeInheritance( GetIndex< std::tuple_size<std::tuple<A1...>>::value >(), T ){}
     template<typename ...A1>
         UnbalanceTreeInheritance( std::tuple<A1...>& T ):UnbalanceTreeInheritance( GetIndex< std::tuple_size<std::tuple<A1...>>::value >(),T ){}
     UnbalanceTreeInheritance<OtherClass...>& GetUpper(){ return *this;}
@@ -53,8 +61,12 @@ class UnbalanceTreeInheritance<ThisClass>:public TupleInitClass<ThisClass>
 {
     public:
     template<unsigned int L,unsigned int N,typename ...A1>
-        UnbalanceTreeInheritance( const IndexSquence<L,N>& IS, std::tuple<A1...>& T ):TupleInitClass<ThisClass>(std::get<IndexSquence<L,N>::Value>(T)){}
+        UnbalanceTreeInheritance( const IndexSquence<L,N>& IS,std::tuple<A1...>& T ):TupleInitClass<ThisClass>(std::get<IndexSquence<L,N>::Value>(T)){}
+    template<unsigned int L,unsigned int N,typename ...A1>
+        UnbalanceTreeInheritance( const IndexSquence<L,N>& IS,std::tuple<A1...>&& T ):TupleInitClass<ThisClass>(std::get<IndexSquence<L,N>::Value>(std::forward<std::tuple<A1...>>(T))){}
 public:
+    template<typename ...A1>
+        UnbalanceTreeInheritance( std::tuple<A1...>&& T ):UnbalanceTreeInheritance( GetIndex< std::tuple_size<std::tuple<A1...>>::value >(), std::forward<std::tuple<A1...>>(T)){}
     template<typename ...A1>
         UnbalanceTreeInheritance( std::tuple<A1...>& T ):UnbalanceTreeInheritance( GetIndex< std::tuple_size<std::tuple<A1...>>::value >(),T ){}
     typedef ThisClass type;
